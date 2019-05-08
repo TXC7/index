@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="container" style="width:500px;height:400px;position:relative;margin:0 auto">
+    <div id="demo">
+        <img onmouseover="xuanzhuan()" src="http://images.cnblogs.com/cnblogs_com/bluedream2009/201609/o_mm.jpg" width="500" height="333" />
+    </div>
+</div>
+<script type="text/javascript">
+    var canTransition = function () {
+        var el = document.createElement('foo');
+        el.style.cssText = '-webkit-transition: all .5s linear;';
+        return !!el.style.webkitTransitionProperty;
+    } ();
+    var o = document.getElementById('demo');
+    function rotationImg() {
+        if (document.all) {
+            var i = 0, j = 0, vx = 0, vy = 0, exp = 1 / 36;
+            function run(angle) {
+                j++;
+                vx = Math.cos(angle * Math.PI / 180) * j * exp;
+                vy = Math.sin(angle * Math.PI / 180) * j * exp;
+                with (o.filters.item(0)) {
+                    M11 = M22 = vx; M12 = -(M21 = vy); M22 = vx;
+                }
+                o.style.top = (333 - o.offsetHeight) / 2 + 'px';
+                o.style.left = (500 - o.offsetWidth) / 2 + 'px';
+            }
+            function doRotation() {
+                o.onfilterchange = doRotation;
+                i += 10;
+                if (i > 359) {
+                    i = 0;
+                    o.onfilterchange = null;
+                }
+                run(i);
+            }
+            doRotation();
+        } else {
+            if (canTransition) {
+                o.style.webkitTransition = '-webkit-transform 1s ease-in';
+                o.style.webkitTransform = 'rotate(360deg)';
+            }
+        }
+    }
+     function xuanzhuan () {
+        rotationImg();
+        o.onclick = function () {
+            rotationImg();
+        }
+    }
+</script>
+	</body>
+</html>
